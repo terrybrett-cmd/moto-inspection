@@ -269,7 +269,7 @@ input[type=file]{display:none}
 // ── Config ──────────────────────────────────────────────
 var CLIENT_ID = '134107909380-1cmlhcaoatgr2vkm99tvg0dhkaohqkj1.apps.googleusercontent.com';
 var SCOPES = 'https://www.googleapis.com/auth/drive.file';
-var FOLDER_NAME = 'Motorcycle Inspections';
+var FOLDER_ID = "1Kt2S_XTn-1T3_9CjheIzGNK0ls8FkZhz";
 
 // ── State ────────────────────────────────────────────────
 var images = [], damages = [], logoSrc = '';
@@ -545,25 +545,8 @@ async function uploadToDrive(btn, status){
 }
 
 async function findOrCreateFolder(){
-  // Search for existing folder
-  var searchRes = await fetch(
-    'https://www.googleapis.com/drive/v3/files?q='+
-    encodeURIComponent('name="'+FOLDER_NAME+'" and mimeType="application/vnd.google-apps.folder" and trashed=false')+
-    '&fields=files(id,name)',
-    {headers:{'Authorization':'Bearer '+driveAccessToken}}
-  );
-  var searchData = await searchRes.json();
-  if(searchData.files && searchData.files.length>0){
-    return searchData.files[0].id;
-  }
-  // Create it if not found
-  var createRes = await fetch('https://www.googleapis.com/drive/v3/files',{
-    method:'POST',
-    headers:{'Authorization':'Bearer '+driveAccessToken,'Content-Type':'application/json'},
-    body: JSON.stringify({name:FOLDER_NAME, mimeType:'application/vnd.google-apps.folder'})
-  });
-  var createData = await createRes.json();
-  return createData.id;
+  // Use hardcoded folder ID — Motorcycle Inspection Reports in PARA structure
+  return FOLDER_ID;
 }
 
 // ── Copy text ────────────────────────────────────────────
