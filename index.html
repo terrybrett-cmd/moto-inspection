@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Inspection Form">
+<title>Motorcycle Inspection Form</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#111;background:#f4f4f0;padding:0 0 3rem}
+header{background:#111;color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{font-size:16px;font-weight:500}
+.section{background:#fff;border-radius:12px;padding:1rem 1.25rem;margin:12px 12px 0}
+.sec-title{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
+.edit-link{font-size:12px;color:#0066cc;text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:none;border:none;padding:0}
+label{display:block;font-size:13px;color:#666;margin-bottom:4px;margin-top:10px}
+label:first-of-type{margin-top:0}
+input[type=text],input[type=number],input[type=date],textarea,select{width:100%;padding:9px 11px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;color:#111;background:#f9f9f7;-webkit-appearance:none;appearance:none}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#111}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tyre-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tyre-card{background:#f9f9f7;border:1px solid #eee;border-radius:8px;padding:10px 12px}
+.tyre-lbl{font-size:12px;color:#666;margin-bottom:6px}
+.tyre-lbl strong{color:#111;font-weight:500}
+.tyre-inp{display:flex;align-items:center;gap:6px}
+.tyre-inp input{flex:1;text-align:center}
+.tyre-unit{font-size:12px;color:#999;white-space:nowrap}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.img-slot{aspect-ratio:4/3;border:1.5px dashed #ddd;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;overflow:hidden;background:#f9f9f7}
+.img-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.img-slot .rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.55);border:none;color:#fff;border-radius:50%;width:24px;height:24px;font-size:15px;line-height:24px;text-align:center;cursor:pointer;z-index:2}
+.add-img-btn{border:1.5px dashed #ddd;border-radius:8px;background:#f9f9f7;padding:11px;font-size:13px;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:8px}
+.damage-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.damage-item:last-child{border-bottom:none}
+.damage-item input[type=text]{flex:1}
+.damage-item select{width:100px;flex-shrink:0}
+.rm-dmg{background:none;border:none;color:#bbb;font-size:20px;cursor:pointer;padding:0 4px;line-height:1}
+.add-btn{border:1px solid #ddd;border-radius:8px;background:transparent;padding:9px 14px;font-size:13px;color:#666;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:10px}
+input[type=file]{display:none}
+.logo-slot{border:1.5px dashed #ddd;border-radius:8px;background:#f9f9f7;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:80px;position:relative;overflow:hidden}
+.logo-slot img{max-height:60px;max-width:100%;object-fit:contain}
+.logo-slot .li{font-size:24px;color:#bbb}
+.logo-slot span{font-size:12px;color:#999}
+.logo-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.45);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:13px;line-height:22px;text-align:center;cursor:pointer}
+.saved-tag{font-size:11px;background:#eaf3de;color:#3b6d11;padding:3px 10px;border-radius:10px;display:inline-block}
+.divider{height:1px;background:#f0f0f0;margin:10px 0}
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 12px 0}
+.btn-main{padding:14px;background:#111;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit}
+.btn-main i{font-size:17px}
+.btn-secondary{padding:14px;background:#fff;color:#555;border:1px solid #ddd;border-radius:12px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit}
+.btn-secondary i{font-size:17px}
+.report-wrap{display:none;background:#fff;border-radius:12px;padding:1rem 1.25rem;margin:12px 12px 0}
+.r-header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:.75rem;margin-bottom:.75rem;gap:12px}
+.r-logo{max-height:48px;max-width:100px;object-fit:contain;flex-shrink:0}
+.r-h1{font-size:17px;font-weight:600}
+.r-company{font-size:13px;color:#666}
+.r-sub{font-size:12px;color:#999;margin-top:2px}
+.r-sec{margin-bottom:1rem}
+.r-sec-title{font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:8px}
+.r-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
+.r-row span:first-child{color:#666}
+.r-imgs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px}
+.r-imgs img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px}
+.r-dmg-row{font-size:12px;display:flex;gap:8px;padding:3px 0;align-items:baseline}
+.sev{font-size:10px;padding:2px 7px;border-radius:10px;flex-shrink:0}
+.sev-low{background:#eaf3de;color:#3b6d11}
+.sev-medium{background:#faeeda;color:#ba7517}
+.sev-high{background:#fcebeb;color:#a32d2d}
+.r-notes{font-size:13px;line-height:1.6;white-space:pre-wrap;color:#111}
+.report-actions{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
+.report-actions button{flex:1;min-width:80px;padding:11px 8px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:#111;font-family:inherit}
+.report-actions button.primary{background:#111;color:#fff;border-color:#111}
+.report-actions button:disabled{opacity:.45;cursor:not-allowed}
+.status-msg{font-size:12px;text-align:center;margin-top:8px;min-height:18px;color:#888}
+.status-ok{color:#3b6d11;font-weight:500}
+.status-err{color:#a32d2d}
+@media print{
+  header,.action-row,.report-actions,.status-msg,.section{display:none!important}
+  body{background:#fff;padding:0}
+  .report-wrap{display:block!important;margin:0;padding:0;border-radius:0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Motorcycle inspection</h1>
+  <span id="header-company" style="font-size:12px;opacity:.7"></span>
+</header>
+
+<!-- SETTINGS -->
+<div class="section">
+  <div class="sec-title">
+    Company &amp; defaults
+    <button class="edit-link" onclick="toggleSettings()" id="settings-toggle">Edit</button>
+  </div>
+  <div id="settings-view">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="sv-logo-wrap" style="display:none"><img id="sv-logo" src="" alt="Logo" style="max-height:36px;max-width:80px;object-fit:contain"></div>
+      <div>
+        <div style="font-size:14px;font-weight:500" id="sv-company">&mdash;</div>
+        <div style="font-size:12px;color:#888" id="sv-inspector-loc">No defaults saved yet</div>
+      </div>
+    </div>
+  </div>
+  <div id="settings-edit" style="display:none;margin-top:10px">
+    <div class="divider"></div>
+    <label>Company name</label>
+    <input type="text" id="s-company" placeholder="e.g. Nationwide Motorcycle Assessors">
+    <label>Logo</label>
+    <div class="logo-slot" id="logo-slot" onclick="document.getElementById('logo-file').click()">
+      <i class="ti ti-building li" aria-hidden="true" id="logo-icon"></i>
+      <span id="logo-hint">Tap to upload logo</span>
+      <img id="logo-preview" src="" alt="Logo preview" style="display:none">
+      <button class="logo-rm" id="logo-rm" style="display:none" onclick="removeLogo(event)" aria-label="Remove logo">&times;</button>
+    </div>
+    <input type="file" id="logo-file" accept="image/*" onchange="uploadLogo(this)">
+    <label>Default inspector name</label>
+    <input type="text" id="s-inspector" placeholder="Your name">
+    <label>Default location</label>
+    <input type="text" id="s-location" placeholder="e.g. Midlands depot">
+    <button class="add-btn" style="margin-top:14px;width:100%;justify-content:center" onclick="saveSettings()">
+      <i class="ti ti-device-floppy" aria-hidden="true"></i> Save defaults
+    </button>
+    <div id="saved-msg" style="display:none;text-align:center;margin-top:8px"><span class="saved-tag">&#10003; Saved</span></div>
+  </div>
+</div>
+
+<!-- INSPECTION DETAILS -->
+<div class="section">
+  <div class="sec-title">Inspection details</div>
+  <label>Ref / job number</label>
+  <input type="text" id="ref" placeholder="INS-2026-001">
+  <label>Date of inspection</label>
+  <input type="date" id="date">
+  <label>Inspector name</label>
+  <input type="text" id="inspector" placeholder="Your name">
+  <label>Location</label>
+  <input type="text" id="location" placeholder="e.g. Site, yard, address">
+</div>
+
+<!-- MOTORCYCLE DETAILS -->
+<div class="section">
+  <div class="sec-title">Motorcycle details</div>
+  <div class="row2">
+    <div><label>Make</label><input type="text" id="make" placeholder="Honda"></div>
+    <div><label>Model</label><input type="text" id="model" placeholder="CBR600"></div>
+  </div>
+  <div class="row2">
+    <div><label>Year</label><input type="number" id="year" placeholder="2022" min="1900" max="2030"></div>
+    <div><label>Colour</label><input type="text" id="colour" placeholder="Red"></div>
+  </div>
+  <label>Registration</label>
+  <input type="text" id="reg" placeholder="AB12 CDE" style="text-transform:uppercase">
+  <label>VIN / frame number</label>
+  <input type="text" id="vin" placeholder="Optional">
+  <label>Mileage (miles)</label>
+  <input type="number" id="mileage" placeholder="12450" min="0">
+</div>
+
+<!-- TYRES -->
+<div class="section">
+  <div class="sec-title">Tyre depths</div>
+  <div class="tyre-grid">
+    <div class="tyre-card">
+      <div class="tyre-lbl"><strong>Front</strong> tyre</div>
+      <div class="tyre-inp">
+        <input type="number" id="tyre-front" placeholder="4.2" min="0" max="10" step="0.1">
+        <span class="tyre-unit">mm</span>
+      </div>
+      <label style="margin-top:6px">Brand / size</label>
+      <input type="text" id="tyre-front-info" placeholder="120/70">
+    </div>
+    <div class="tyre-card">
+      <div class="tyre-lbl"><strong>Rear</strong> tyre</div>
+      <div class="tyre-inp">
+        <input type="number" id="tyre-rear" placeholder="3.1" min="0" max="10" step="0.1">
+        <span class="tyre-unit">mm</span>
+      </div>
+      <label style="margin-top:6px">Brand / size</label>
+      <input type="text" id="tyre-rear-info" placeholder="180/55">
+    </div>
+  </div>
+</div>
+
+<!-- PHOTOS -->
+<div class="section">
+  <div class="sec-title">Photos</div>
+  <div class="img-grid" id="img-grid"></div>
+  <button class="add-img-btn" onclick="document.getElementById('photo-file').click()">
+    <i class="ti ti-camera" aria-hidden="true"></i> Add photo
+  </button>
+  <input type="file" id="photo-file" accept="image/*" multiple onchange="addImages(this)">
+</div>
+
+<!-- DAMAGE -->
+<div class="section">
+  <div class="sec-title">Damage items</div>
+  <div id="damage-list"></div>
+  <button class="add-btn" onclick="addDamage()">
+    <i class="ti ti-plus" aria-hidden="true"></i> Add damage item
+  </button>
+</div>
+
+<!-- NOTES -->
+<div class="section">
+  <div class="sec-title">Notes</div>
+  <textarea id="notes" placeholder="Additional observations, circumstances, recommendations&#8230;"></textarea>
+</div>
+
+<!-- ACTION BUTTONS -->
+<div class="action-row">
+  <button class="btn-main" onclick="generateReport()">
+    <i class="ti ti-file-description" aria-hidden="true"></i> Generate report
+  </button>
+  <button class="btn-secondary" onclick="clearForm()">
+    <i class="ti ti-refresh" aria-hidden="true"></i> Clear form
+  </button>
+</div>
+
+<!-- REPORT PREVIEW -->
+<div class="report-wrap" id="report-wrap">
+  <div class="r-header">
+    <div style="flex:1">
+      <div class="r-h1">Motorcycle inspection report</div>
+      <div class="r-company" id="p-company" style="display:none"></div>
+      <div class="r-sub" id="p-ref-date"></div>
+    </div>
+    <img class="r-logo" id="p-logo" src="" alt="Logo" style="display:none">
+  </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Motorcycle</div>
+    <div id="p-bike"></div>
+  </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Tyres</div>
+    <div id="p-tyres"></div>
+  </div>
+  <div class="r-sec" id="p-photos-sec" style="display:none">
+    <div class="r-sec-title">Photos</div>
+    <div class="r-imgs" id="p-photos"></div>
+  </div>
+  <div class="r-sec" id="p-damage-sec" style="display:none">
+    <div class="r-sec-title">Damage items</div>
+    <div id="p-damage"></div>
+  </div>
+  <div class="r-sec" id="p-notes-sec" style="display:none">
+    <div class="r-sec-title">Notes</div>
+    <div class="r-notes" id="p-notes"></div>
+  </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Inspector</div>
+    <div id="p-inspector-block"></div>
+  </div>
+  <div class="report-actions">
+    <button onclick="window.print()"><i class="ti ti-printer" aria-hidden="true"></i> Print / PDF</button>
+    <button onclick="copyReport()"><i class="ti ti-copy" aria-hidden="true"></i> Copy text</button>
+    <button class="primary" id="drive-btn" onclick="saveToDrive()"><i class="ti ti-brand-google-drive" aria-hidden="true"></i> Save to Drive</button>
+  </div>
+  <div class="status-msg" id="drive-status"></div>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────
+var CLIENT_ID = '134107909380-1cmlhcaoatgr2vkm99tvg0dhkaohqkj1.apps.googleusercontent.com';
+var SCOPES = 'https://www.googleapis.com/auth/drive.file';
+var FOLDER_NAME = 'Motorcycle Inspections';
+
+// ── State ────────────────────────────────────────────────
+var images = [], damages = [], logoSrc = '';
+var driveAccessToken = null;
+var LS = 'moto_inspect_v4';
+
+// ── Helpers ──────────────────────────────────────────────
+function v(id){ return (document.getElementById(id)||{}).value||''; }
+function eh(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function rRow(label,val){ if(!val)return ''; return '<div class="r-row"><span>'+label+'</span><span>'+eh(val)+'</span></div>'; }
+
+// ── Settings ─────────────────────────────────────────────
+function loadDefaults(){
+  try{
+    var d = JSON.parse(localStorage.getItem(LS)||'{}');
+    if(d.company){ document.getElementById('s-company').value=d.company; document.getElementById('header-company').textContent=d.company; }
+    if(d.inspector) document.getElementById('s-inspector').value=d.inspector;
+    if(d.location) document.getElementById('s-location').value=d.location;
+    if(d.logo){ logoSrc=d.logo; showLogoPreview(d.logo); }
+    applyDefaults(d); updateSettingsView(d);
+  }catch(e){}
+}
+
+function applyDefaults(d){
+  if(d.inspector) document.getElementById('inspector').value=d.inspector;
+  if(d.location) document.getElementById('location').value=d.location;
+}
+
+function updateSettingsView(d){
+  document.getElementById('sv-company').textContent = d.company||'(no company set)';
+  var parts = [d.inspector,d.location].filter(Boolean);
+  document.getElementById('sv-inspector-loc').textContent = parts.join(' \u00b7 ')||'No defaults saved yet';
+  if(d.logo){ document.getElementById('sv-logo').src=d.logo; document.getElementById('sv-logo-wrap').style.display='block'; }
+  else document.getElementById('sv-logo-wrap').style.display='none';
+}
+
+function toggleSettings(){
+  var edit=document.getElementById('settings-edit'), view=document.getElementById('settings-view'), btn=document.getElementById('settings-toggle');
+  var open = edit.style.display==='none';
+  edit.style.display = open?'block':'none';
+  view.style.display = open?'none':'block';
+  btn.textContent = open?'Done':'Edit';
+  document.getElementById('saved-msg').style.display='none';
+}
+
+function saveSettings(){
+  var d = {company:v('s-company'), inspector:v('s-inspector'), location:v('s-location'), logo:logoSrc};
+  localStorage.setItem(LS, JSON.stringify(d));
+  document.getElementById('header-company').textContent = d.company||'';
+  applyDefaults(d); updateSettingsView(d);
+  document.getElementById('saved-msg').style.display='block';
+  setTimeout(function(){ document.getElementById('saved-msg').style.display='none'; }, 2000);
+}
+
+function uploadLogo(input){
+  var file=input.files[0]; if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){ logoSrc=e.target.result; showLogoPreview(logoSrc); };
+  reader.readAsDataURL(file); input.value='';
+}
+
+function showLogoPreview(src){
+  document.getElementById('logo-icon').style.display='none';
+  document.getElementById('logo-hint').style.display='none';
+  var img=document.getElementById('logo-preview'); img.src=src; img.style.display='block';
+  document.getElementById('logo-rm').style.display='block';
+}
+
+function removeLogo(e){
+  e.stopPropagation(); logoSrc='';
+  document.getElementById('logo-preview').style.display='none';
+  document.getElementById('logo-rm').style.display='none';
+  document.getElementById('logo-icon').style.display='';
+  document.getElementById('logo-hint').style.display='';
+}
+
+// ── Photos ───────────────────────────────────────────────
+function addImages(input){
+  Array.from(input.files).forEach(function(file){
+    var reader=new FileReader();
+    reader.onload=function(e){ images.push(e.target.result); renderImages(); };
+    reader.readAsDataURL(file);
+  }); input.value='';
+}
+
+function renderImages(){
+  document.getElementById('img-grid').innerHTML = images.map(function(src,i){
+    return '<div class="img-slot"><img src="'+src+'" alt="Photo '+(i+1)+'"><button class="rm" onclick="removeImage('+i+')" aria-label="Remove photo">&times;</button></div>';
+  }).join('');
+}
+
+function removeImage(i){ images.splice(i,1); renderImages(); }
+
+// ── Damage ───────────────────────────────────────────────
+function addDamage(){
+  var id=Date.now(); damages.push({id:id,item:'',severity:'medium'}); renderDamages();
+  setTimeout(function(){ var el=document.getElementById('di-'+id); if(el)el.focus(); },50);
+}
+
+function renderDamages(){
+  document.getElementById('damage-list').innerHTML = damages.map(function(d){
+    return '<div class="damage-item">'+
+      '<input type="text" id="di-'+d.id+'" value="'+eh(d.item)+'" placeholder="e.g. Front fairing cracked" oninput="upD('+d.id+',\'item\',this.value)" style="flex:1">'+
+      '<select id="ds-'+d.id+'" onchange="upD('+d.id+',\'severity\',this.value)">'+
+        '<option value="low"'+(d.severity==='low'?' selected':'')+'>Low</option>'+
+        '<option value="medium"'+(d.severity==='medium'?' selected':'')+'>Medium</option>'+
+        '<option value="high"'+(d.severity==='high'?' selected':'')+'>High</option>'+
+      '</select>'+
+      '<button class="rm-dmg" onclick="rmD('+d.id+')" aria-label="Remove">&times;</button>'+
+    '</div>';
+  }).join('');
+}
+
+function upD(id,f,val){ var d=damages.find(function(x){return x.id===id;}); if(d)d[f]=val; }
+function rmD(id){ damages=damages.filter(function(x){return x.id!==id;}); renderDamages(); }
+
+// ── Clear form ───────────────────────────────────────────
+function clearForm(){
+  if(!confirm('Clear all inspection data? Your saved defaults will be kept.'))return;
+  ['ref','date','inspector','location','make','model','year','colour','reg','vin','mileage',
+   'tyre-front','tyre-front-info','tyre-rear','tyre-rear-info','notes'].forEach(function(id){
+    var el=document.getElementById(id); if(el)el.value='';
+  });
+  images=[]; damages=[]; renderImages(); renderDamages();
+  document.getElementById('report-wrap').style.display='none';
+  document.getElementById('date').value=new Date().toISOString().split('T')[0];
+  try{ var d=JSON.parse(localStorage.getItem(LS)||'{}'); applyDefaults(d); }catch(e){}
+}
+
+// ── Generate report preview ──────────────────────────────
+function generateReport(){
+  var date=v('date'), displayDate=date?new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'';
+  var company=v('s-company'), ref=v('ref'), loc=v('location');
+  document.getElementById('p-ref-date').textContent = [ref,displayDate,loc].filter(Boolean).join(' \u00b7 ');
+  var compEl=document.getElementById('p-company');
+  if(company){compEl.textContent=company;compEl.style.display='block';}else compEl.style.display='none';
+  var logoEl=document.getElementById('p-logo');
+  if(logoSrc){logoEl.src=logoSrc;logoEl.style.display='block';}else logoEl.style.display='none';
+  document.getElementById('p-bike').innerHTML=[
+    rRow('Make &amp; model',[v('make'),v('model')].filter(Boolean).join(' ')),
+    rRow('Year',v('year')), rRow('Colour',v('colour')),
+    rRow('Registration',v('reg').toUpperCase()), rRow('VIN',v('vin')),
+    rRow('Mileage',v('mileage')?Number(v('mileage')).toLocaleString()+' miles':''),
+  ].join('');
+  var tf=v('tyre-front'), tr=v('tyre-rear');
+  document.getElementById('p-tyres').innerHTML=[
+    rRow('Front',tf?tf+'mm'+(v('tyre-front-info')?' \u2014 '+v('tyre-front-info'):''):''),
+    rRow('Rear',tr?tr+'mm'+(v('tyre-rear-info')?' \u2014 '+v('tyre-rear-info'):''):''),
+  ].join('');
+  if(images.length){
+    document.getElementById('p-photos-sec').style.display='block';
+    document.getElementById('p-photos').innerHTML=images.map(function(s){return '<img src="'+s+'" alt="">';}).join('');
+  }else document.getElementById('p-photos-sec').style.display='none';
+  if(damages.length){
+    document.getElementById('p-damage-sec').style.display='block';
+    document.getElementById('p-damage').innerHTML=damages.map(function(d){
+      return '<div class="r-dmg-row"><span class="sev sev-'+d.severity+'">'+d.severity+'</span><span>'+eh(d.item||'(unnamed)')+'</span></div>';
+    }).join('');
+  }else document.getElementById('p-damage-sec').style.display='none';
+  var notes=v('notes');
+  if(notes){document.getElementById('p-notes-sec').style.display='block';document.getElementById('p-notes').textContent=notes;}
+  else document.getElementById('p-notes-sec').style.display='none';
+  document.getElementById('p-inspector-block').innerHTML=[
+    rRow('Inspector',v('inspector')), rRow('Date',displayDate), rRow('Location',loc),
+  ].join('');
+  document.getElementById('drive-status').textContent='';
+  document.getElementById('drive-status').className='status-msg';
+  var wrap=document.getElementById('report-wrap');
+  wrap.style.display='block';
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── Build standalone report HTML ─────────────────────────
+function buildReportHTML(){
+  var date=v('date'), displayDate=date?new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'';
+  var company=v('s-company');
+  var logoTag=logoSrc?'<img src="'+logoSrc+'" style="max-height:60px;max-width:120px;object-fit:contain;flex-shrink:0" alt="Logo">':'';
+  var companyTag=company?'<div style="font-size:14px;color:#666;margin-top:2px">'+eh(company)+'</div>':'';
+  var refDate=[v('ref'),displayDate,v('location')].filter(Boolean).join(' \u00b7 ');
+  var bikeRows=[
+    ['Make &amp; model',[v('make'),v('model')].filter(Boolean).join(' ')],
+    ['Year',v('year')],['Colour',v('colour')],
+    ['Registration',v('reg').toUpperCase()],['VIN',v('vin')],
+    ['Mileage',v('mileage')?Number(v('mileage')).toLocaleString()+' miles':''],
+  ].filter(function(r){return r[1];}).map(function(r){
+    return '<tr><td style="color:#666;padding:4px 12px 4px 0;font-size:13px;white-space:nowrap">'+r[0]+'</td><td style="font-size:13px;padding:4px 0">'+eh(r[1])+'</td></tr>';
+  }).join('');
+  var tf=v('tyre-front'),tr=v('tyre-rear');
+  var tyreRows=[
+    ['Front',tf?tf+'mm'+(v('tyre-front-info')?' \u2014 '+v('tyre-front-info'):''):''],
+    ['Rear',tr?tr+'mm'+(v('tyre-rear-info')?' \u2014 '+v('tyre-rear-info'):''):''],
+  ].filter(function(r){return r[1];}).map(function(r){
+    return '<tr><td style="color:#666;padding:4px 12px 4px 0;font-size:13px;white-space:nowrap">'+r[0]+'</td><td style="font-size:13px;padding:4px 0">'+eh(r[1])+'</td></tr>';
+  }).join('');
+  var sevColour={low:'#eaf3de',medium:'#faeeda',high:'#fcebeb'};
+  var sevText={low:'#3b6d11',medium:'#ba7517',high:'#a32d2d'};
+  var photoSection=images.length?'<div style="margin-bottom:1.5rem"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:10px">Photos</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+images.map(function(src,i){return '<img src="'+src+'" alt="Photo '+(i+1)+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px">';}).join('')+'</div></div>':'';
+  var damageSection=damages.length?'<div style="margin-bottom:1.5rem"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:8px">Damage items</div>'+damages.map(function(d){return '<div style="display:flex;gap:8px;align-items:baseline;padding:4px 0;font-size:13px"><span style="background:'+sevColour[d.severity]+';color:'+sevText[d.severity]+';font-size:10px;padding:2px 7px;border-radius:10px;flex-shrink:0">'+d.severity+'</span><span>'+eh(d.item||'(unnamed)')+'</span></div>';}).join('')+'</div>':'';
+  var notes=v('notes');
+  var notesSection=notes?'<div style="margin-bottom:1.5rem"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:8px">Notes</div><div style="font-size:13px;line-height:1.7;white-space:pre-wrap">'+eh(notes)+'</div></div>':'';
+  return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inspection \u2014 '+eh(v('reg')||v('ref')||'Motorcycle')+'</title>'
+    +'<style>body{font-family:Arial,sans-serif;max-width:820px;margin:40px auto;padding:0 24px;color:#111}table{width:100%;border-collapse:collapse}@media print{body{margin:20px}}</style></head><body>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:14px;margin-bottom:20px;gap:16px">'
+    +'<div style="flex:1"><div style="font-size:22px;font-weight:700">Motorcycle inspection report</div>'+companyTag+'<div style="font-size:12px;color:#999;margin-top:4px">'+eh(refDate)+'</div></div>'+logoTag+'</div>'
+    +'<div style="margin-bottom:1.5rem"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:8px">Motorcycle</div><table>'+bikeRows+'</table></div>'
+    +'<div style="margin-bottom:1.5rem"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:8px">Tyres</div><table>'+tyreRows+'</table></div>'
+    +photoSection+damageSection+notesSection
+    +'<div style="margin-bottom:1rem"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#888;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:8px">Inspector</div><table>'
+    +(v('inspector')?'<tr><td style="color:#666;padding:4px 12px 4px 0;font-size:13px">Inspector</td><td style="font-size:13px;padding:4px 0">'+eh(v('inspector'))+'</td></tr>':'')
+    +(displayDate?'<tr><td style="color:#666;padding:4px 12px 4px 0;font-size:13px">Date</td><td style="font-size:13px;padding:4px 0">'+displayDate+'</td></tr>':'')
+    +(v('location')?'<tr><td style="color:#666;padding:4px 12px 4px 0;font-size:13px">Location</td><td style="font-size:13px;padding:4px 0">'+eh(v('location'))+'</td></tr>':'')
+    +'</table></div></body></html>';
+}
+
+// ── Google OAuth + Drive save ─────────────────────────────
+function saveToDrive(){
+  var btn=document.getElementById('drive-btn'), status=document.getElementById('drive-status');
+  status.textContent='Connecting to Google\u2026';
+  status.className='status-msg';
+  btn.disabled=true;
+
+  var client = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: function(response){
+      if(response.error){
+        status.textContent='Sign-in cancelled or failed. Please try again.';
+        status.className='status-msg status-err';
+        btn.disabled=false;
+        return;
+      }
+      driveAccessToken = response.access_token;
+      uploadToDrive(btn, status);
+    }
+  });
+  client.requestAccessToken();
+}
+
+async function uploadToDrive(btn, status){
+  status.textContent='Finding Motorcycle Inspections folder\u2026';
+  var reg = v('reg')||v('ref')||'report';
+  var date = v('date')||new Date().toISOString().split('T')[0];
+  var filename = 'Inspection_'+reg.replace(/\s+/g,'_')+'_'+date+'.html';
+  var html = buildReportHTML();
+
+  try{
+    // Find or create the Motorcycle Inspections folder
+    var folderId = await findOrCreateFolder();
+
+    // Upload the file
+    status.textContent='Saving report\u2026';
+    var metadata = {name: filename, mimeType: 'text/html', parents: [folderId]};
+    var form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(metadata)],{type:'application/json'}));
+    form.append('file', new Blob([html],{type:'text/html'}));
+
+    var uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+driveAccessToken},
+      body: form
+    });
+
+    if(!uploadRes.ok) throw new Error('Upload failed: '+uploadRes.status);
+
+    status.textContent='\u2713 Saved: '+filename;
+    status.className='status-msg status-ok';
+  }catch(err){
+    console.error(err);
+    status.textContent='Error saving to Drive. Please try again.';
+    status.className='status-msg status-err';
+  }
+  btn.disabled=false;
+}
+
+async function findOrCreateFolder(){
+  // Search for existing folder
+  var searchRes = await fetch(
+    'https://www.googleapis.com/drive/v3/files?q='+
+    encodeURIComponent('name="'+FOLDER_NAME+'" and mimeType="application/vnd.google-apps.folder" and trashed=false')+
+    '&fields=files(id,name)',
+    {headers:{'Authorization':'Bearer '+driveAccessToken}}
+  );
+  var searchData = await searchRes.json();
+  if(searchData.files && searchData.files.length>0){
+    return searchData.files[0].id;
+  }
+  // Create it if not found
+  var createRes = await fetch('https://www.googleapis.com/drive/v3/files',{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+driveAccessToken,'Content-Type':'application/json'},
+    body: JSON.stringify({name:FOLDER_NAME, mimeType:'application/vnd.google-apps.folder'})
+  });
+  var createData = await createRes.json();
+  return createData.id;
+}
+
+// ── Copy text ────────────────────────────────────────────
+function copyReport(){
+  var lines=['MOTORCYCLE INSPECTION REPORT'];
+  if(v('s-company')) lines.push(v('s-company'));
+  lines.push(document.getElementById('p-ref-date').textContent,'');
+  lines.push('MOTORCYCLE');
+  [['Make',v('make')+' '+v('model')],['Year',v('year')],['Colour',v('colour')],
+   ['Reg',v('reg').toUpperCase()],['VIN',v('vin')],
+   ['Mileage',v('mileage')?Number(v('mileage')).toLocaleString()+' miles':'']
+  ].forEach(function(r){if(r[1].trim())lines.push(r[0]+': '+r[1]);});
+  lines.push('','TYRES');
+  if(v('tyre-front')) lines.push('Front: '+v('tyre-front')+'mm '+v('tyre-front-info'));
+  if(v('tyre-rear')) lines.push('Rear: '+v('tyre-rear')+'mm '+v('tyre-rear-info'));
+  if(damages.length){
+    lines.push('','DAMAGE ITEMS');
+    damages.forEach(function(d){lines.push('['+d.severity.toUpperCase()+'] '+(d.item||'(unnamed)'));});
+  }
+  if(v('notes')) lines.push('','NOTES',v('notes'));
+  lines.push('','INSPECTOR: '+v('inspector'));
+  navigator.clipboard.writeText(lines.join('\n')).then(function(){alert('Report copied to clipboard');});
+}
+
+// ── Init ─────────────────────────────────────────────────
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
+loadDefaults();
+</script>
+</body>
+</html>
